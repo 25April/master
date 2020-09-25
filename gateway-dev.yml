@@ -1,0 +1,61 @@
+server:
+  port: 7005
+spring:
+  application:
+    name: gateway
+  cloud:
+    gateway:
+      globalcors:
+        corsConfigurations:
+          '[/**]': # 匹配所有请求
+            allowedOrigins: "*" #跨域处理 允许所有的域
+            allowedMethods: "*"# 支持的方法
+#            allow
+#              - GET
+#              - POST
+#              - PUT
+#              - DELETE
+      routes:
+      - id: father-server
+        uri: lb://father-server
+        predicates:
+        - Path=/xuli/**
+        filters:
+          #- StripPrefix=1
+          - RewritePath=/xuli/(?<segment>.*), /$\{segment}
+#          - name: RequestRateLimiter
+#            args:
+#              key-resolver: '#{@userKeyResolver}' # 使用SpEL从容器中获取对象
+#              redis-rate-limiter.replenishRate: 1 # 令牌桶每秒填充平均速率
+#              redis-rate-limiter.burstCapacity: 3 # 令牌桶的总容量
+      - id: boy-server
+        uri: lb://boy-server
+        predicates:
+        - Path=/user/**
+    consul:
+      host: 127.0.0.1
+      port: 8500
+      discovery:
+        port: ${server.port}
+        instance-id: ${spring.application.name}-${server.port}
+        prefer-ip-address: true
+        service-name: ${spring.application.name}
+        register: true
+        ip-address: ${spring.cloud.client.ip-address}
+  zipkin:
+    base-url: http://127.0.0.1:9411/ #zipkin server的请求地址
+    sender:
+      type: web #请求方式,默认以http的方式向zk server发送追踪数据
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    database: 0
+  sleuth:
+    sampler:
+      probability: 1.0
+logging:
+  level:
+    root: INFO
+    org.springframework.web.servlet.DispatcherServlet: DEBUG
+    org.springframework.cloud.sleuth: DEBUG
+test: xuli
