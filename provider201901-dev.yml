@@ -25,7 +25,7 @@ mybatis:
   type-aliases-package: cn.cloud.xuli.entity
   configuration:
     map-underscore-to-camel-case: true
-   
+    auto-mapping-behavior: full
 eureka:
   client:
     service-url:
