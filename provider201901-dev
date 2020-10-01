@@ -1,0 +1,37 @@
+server:
+  port: 8001
+spring:
+  application:
+    name: provider-server
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+    url: jdbc:mysql://localhost:3306/newhousedb?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai
+    username: root
+    password: ok
+  cloud:
+    sentinel:
+      transport:
+        dashboard: http://localhost:10000
+  zipkin:
+    base-url: http://127.0.0.1:9411/ #zipkin server的请求地址
+    sender:
+      type: web #请求方式,默认以http的方式向zk server发送追踪数据
+  sleuth:
+    sampler:
+      probability: 1.0 #采样百分比
+mybatis:
+  mapper-locations: classpath*:mappers/*Mapper.xml
+  type-aliases-package: cn.cloud.xuli.entity
+  configuration:
+    map-underscore-to-camel-case: true
+    auto-mapping-behavior: full
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:7001/eureka/
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.cloud.client.ip-address}:${server.port}
+    lease-renewal-interval-in-seconds: 4
+    lease-expiration-duration-in-seconds: 10
