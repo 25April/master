@@ -20,6 +20,8 @@ spring:
   sleuth:
     sampler:
       probability: 1.0 #采样百分比
+  main:
+    allow-bean-definition-overriding: true
 mybatis:
   mapper-locations: classpath*:mappers/*Mapper.xml
   type-aliases-package: cn.cloud.xuli.entity
