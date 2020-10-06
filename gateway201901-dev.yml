@@ -8,6 +8,7 @@ spring:
       globalcors:
         corsConfigurations:
           '[/**]': # 匹配所有请求
+            allowedHeaders: "*"
             allowedOrigins: "*" #跨域处理 允许所有的域
             allowedMethods: "*"# 支持的方法
       routes:
